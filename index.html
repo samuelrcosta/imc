@@ -1,0 +1,112 @@
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <title>Cálculo Online de IMC</title>
+        <link rel="icon" href="assets/images/favicon-calculator.ico" />
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.min.js"></script>
+        <script src="assets/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
+        <style>
+            .modal-calculadora{
+                margin: auto;
+                margin-top: 40px;
+                background-color: #e3e3e3;
+                border-radius: 10px;
+                padding: 20px;
+                width: 320px;
+            }
+            .modal-calculadora h1{
+                font-size: 30px;
+                margin-bottom: 20px;
+            }
+            #resultado{
+                display: none;
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-brand" href="#">
+                    <img src="assets/images/favicon-calculator.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+                    Calculadora de IMC Online
+                </a>
+            </nav>
+        </header>
+        <div class="container">
+            <div class="modal-calculadora">
+                <h1>Preencha os dados e descubra o seu IMC</h1>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite seu nome" />
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="idade" id="idade" placeholder="Digite sua idade" />
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="altura" id="altura" placeholder="Digite sua altura (cm)" />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="peso" id="peso" placeholder="Digite seu peso (kg)" />
+                </div>
+                <div id="resultado">
+                    <h5>Resultado: </h1>
+                    <span id="resultado-texto"></span>
+                </div>
+                <button type="button" class="btn btn-secondary" id="limpar">Limpar</button>
+                <button type="button" class="btn btn-success" id="calcular">Calcular</button>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#calcular").click(function(){
+                    var nome = $("#nome").val();
+                    var altura = $("#altura").val();
+                    var peso = parseFloat($("#peso").val().replace(",", "."));
+                    if(nome == '' || altura == '' || peso == NaN){
+                        $("#resultado-texto").html("<b style='color: red'>ERRO: Preencha todos os campos corretamente.</b>");
+                        $("#resultado").slideDown();
+                    }else{
+                        // Calcula o IMC
+                        altura = altura / 100;
+                        var imc = (peso / (altura *  altura)).toFixed(2);
+                        $("#resultado-texto").html("<b>IMC: " + imc + "</b><br>");
+                        var mensagem = "";
+                        if(imc <= 16.9){
+                            mensagem = "<b style='color: red'>PERIGO " + nome + "!<br>Classificação: Muito abaixo do peso</b>";
+                        }else if(imc > 16.9 && imc <= 18.4){
+                            mensagem = "<b style='color: darkred'>Cuidado " + nome + "!<br>Classificação: Abaixo do peso</b>";
+                        }else if(imc > 18.5 && imc <= 24.9){
+                            mensagem = "<b style='color: green'>Parabéns " + nome + "!<br>Classificação: Peso normal</b>";
+                        }else if(imc > 25 && imc <= 29.9 ){
+                            mensagem = "<b style='color: darkred'>Cuidado " + nome + "!<br>Classificação: Acima do peso</b>";
+                        }else if(imc > 30 && imc <= 34.9 ){
+                            mensagem = "<b style='color: darkred'>Perigo " + nome + "!<br>Classificação: Obesidade Grau I</b>";
+                        }else if(imc > 35 && imc <= 40 ){
+                            mensagem = "<b style='color: red'>PERIGO " + nome + "!<br>Classificação: Obesidade Grau II</b>";
+                        }else if(imc > 40 ){
+                            mensagem = "<b style='color: red'>PERIGO " + nome + "!<br>Classificação: Obesidade Grau III</b>";
+                        }
+                        $("#resultado-texto").append(mensagem);
+                        $("#resultado").slideDown();
+                    }
+                });
+                
+                $("#limpar").click(function(){
+                    $("#nome").val("");
+                    $("#idade").val("");
+                    $("#altura").val("");
+                    $("#peso").val("");
+                    $("#resultado-texto").html("");
+                    $("#resultado").slideUp();
+                });
+
+            });    
+        </script>
+    </body>
+</html>
